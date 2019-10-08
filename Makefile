@@ -85,7 +85,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # common action
-.PHONY: flash clean
+.PHONY: all flash clean format
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
 flash: $(BUILD_DIR)/$(TARGET).bin
@@ -93,6 +93,9 @@ flash: $(BUILD_DIR)/$(TARGET).bin
 
 clean:
 	-rm -fR $(BUILD_DIR)
+
+format:
+	find Src -name '*.c' -o -name '*.h' | xargs -I{} clang-format -i {}
 
 # build
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
