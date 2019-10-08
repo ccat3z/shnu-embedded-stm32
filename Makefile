@@ -1,5 +1,5 @@
 # Flags
-TARGET = led
+TARGET = key
 DEBUG = 1
 OPT = -Og
 
