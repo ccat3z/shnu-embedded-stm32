@@ -25,6 +25,8 @@ Src/stm32f7xx_hal_msp.c \
 Src/system/delay.c \
 Src/system/sys.c \
 Src/system/usart.c \
+Src/hardware/key.c \
+Src/hardware/led.c \
 Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_cortex.c \
 Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_tim.c \
 Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_tim_ex.c \
