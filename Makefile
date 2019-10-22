@@ -1,5 +1,6 @@
 # Flags
 TARGET = led
+RELEASE_TARGET =  $(TARGET).zip
 DEBUG = 1
 OPT = -Og
 
@@ -92,7 +93,7 @@ flash: $(BUILD_DIR)/$(TARGET).bin
 	st-flash write $(BUILD_DIR)/$(TARGET).bin 0x08000000
 
 clean:
-	-rm -fR $(BUILD_DIR)
+	-rm -fR $(BUILD_DIR) $(RELEASE_TARGET)
 
 format:
 	find Src -name '*.c' -o -name '*.h' | xargs -I{} clang-format -i {}
@@ -124,7 +125,7 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 
 # release
 .PHONY: zip
-zip: $(TARGET).zip
+zip: $(RELEASE_TARGET)
 
 RELEASE_FILES= \
 $(BUILD_DIR)/$(TARGET).elf \
@@ -137,5 +138,5 @@ Src \
 startup_stm32f767xx.s \
 STM32F767IGTx_FLASH.ld
 
-$(TARGET).zip: $(RELEASE_FILES)
+$(RELEASE_TARGET): $(RELEASE_FILES)
 	zip -r $(TARGET).zip  $(RELEASE_FILES)
