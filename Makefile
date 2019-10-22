@@ -1,5 +1,5 @@
 # Flags
-TARGET = led
+TARGET = target
 RELEASE_TARGET =  $(TARGET).zip
 DEBUG = 1
 OPT = -Og
