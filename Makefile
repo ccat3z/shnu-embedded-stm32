@@ -139,4 +139,5 @@ startup_stm32f767xx.s \
 STM32F767IGTx_FLASH.ld
 
 $(RELEASE_TARGET): $(RELEASE_FILES)
+	-rm $(RELEASE_TARGET)
 	zip -r $(TARGET).zip  $(RELEASE_FILES)
