@@ -121,3 +121,21 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
+
+# release
+.PHONY: zip
+zip: $(TARGET).zip
+
+RELEASE_FILES= \
+$(BUILD_DIR)/$(TARGET).elf \
+$(BUILD_DIR)/$(TARGET).hex \
+$(BUILD_DIR)/$(TARGET).bin \
+Drivers \
+Inc \
+Makefile \
+Src \
+startup_stm32f767xx.s \
+STM32F767IGTx_FLASH.ld
+
+$(TARGET).zip: $(RELEASE_FILES)
+	zip -r $(TARGET).zip  $(RELEASE_FILES)
