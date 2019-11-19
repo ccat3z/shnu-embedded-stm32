@@ -21,6 +21,14 @@ int main(void)
 		{					   
 			len=USART_RX_STA&0x3fff;//得到此次接收到的数据长度
 			printf("\r\nyou send\r\n");
+            switch (*((uint8_t*)USART_RX_BUF)) {
+				case 'l':
+					LED0_Toggle;
+				  break;
+				case 'r':
+					LED1_Toggle;
+				  break;
+			}
 			HAL_UART_Transmit(&UART1_Handler,(uint8_t*)USART_RX_BUF,len,1000);	//发送接收到的数据
 			while(__HAL_UART_GET_FLAG(&UART1_Handler,UART_FLAG_TC)!=SET);		//等待发送结束
 			printf("\r\n\r\n");//插入换行
@@ -34,7 +42,7 @@ int main(void)
 				printf("正点原子@ALIENTEK\r\n\r\n\r\n");
 			}
 			if(times%200==0)printf("请输入数据,以回车键结束\r\n");  
-			if(times%30==0)LED0_Toggle;//闪烁LED,提示系统正在运行.
+			// if(times%30==0)LED0_Toggle;//闪烁LED,提示系统正在运行.
 			delay_ms(10);   
 		}
 	}
