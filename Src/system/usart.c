@@ -18,26 +18,20 @@
 //********************************************************************************
 // V1.0修改说明
 //////////////////////////////////////////////////////////////////////////////////
-//加入以下代码,支持printf函数,而不需要选择use MicroLIB
-//#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#if 1
-#pragma import(__use_no_semihosting)
-//标准库需要的支持函数
-struct __FILE {
-    int handle;
-};
 
-FILE __stdout;
-//定义_sys_exit()以避免使用半主机模式
-void _sys_exit(int x) { x = x; }
-//重定义fputc函数
-int fputc(int ch, FILE *f) {
-    while ((USART1->ISR & 0X40) == 0)
-        ; //循环发送,直到发送完毕
-    USART1->TDR = (u8)ch;
-    return ch;
+// inject printf and scanf
+int _write (int fd, char *ptr, int len)
+{
+    HAL_UART_Transmit(&UART1_Handler, (uint8_t*) ptr, len, 0xFFFF);
+    return len;
 }
-#endif
+
+int _read (int fd, char *ptr, int len)
+{
+    *ptr = 0x00; // Flush the character buffer
+    HAL_UART_Receive(&UART1_Handler, (uint8_t*) ptr, 1, 0xFFFF);
+    return 1;
+}
 
 #if EN_USART1_RX //如果使能了接收
 //串口1中断服务程序
