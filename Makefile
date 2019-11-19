@@ -1,5 +1,5 @@
 # Flags
-TARGET = target
+TARGET = usart
 RELEASE_TARGET =  $(TARGET).zip
 DEBUG = 1
 OPT = -Og

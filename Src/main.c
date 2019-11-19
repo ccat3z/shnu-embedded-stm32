@@ -1,33 +1,41 @@
 #include "system/sys.h"
 #include "system/delay.h"
 #include "system/usart.h"
-void Delay(__IO uint32_t nCount);
-void Delay(__IO uint32_t nCount) {
-    while (nCount--) {
-    }
-}
+#include "hardware/led.h"
+#include "hardware/key.h"
 
-int main(void) {
-    GPIO_InitTypeDef GPIO_Initure;
+int main(void)
+{
+    u8 len;	
+	u16 times=0; 
+    Cache_Enable();                 //打开L1-Cache
+    HAL_Init();				        //初始化HAL库
+    Stm32_Clock_Init(432,25,2,9);   //设置时钟,216Mhz 
+    delay_init(216);                //延时初始化
+	uart_init(115200);		        //串口初始化
+    LED_Init();                     //初始化LED
 
-    Cache_Enable();                  //打开L1-Cache
-    HAL_Init();                      //初始化HAL库
-    Stm32_Clock_Init(432, 25, 2, 9); //设置时钟,216Mhz
-    __HAL_RCC_GPIOB_CLK_ENABLE();    //开启GPIOB时钟
-
-    GPIO_Initure.Pin = GPIO_PIN_0 | GPIO_PIN_1; // PB1,0
-    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP;    //推挽输出
-    GPIO_Initure.Pull = GPIO_PULLUP;            //上拉
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;       //高速
-    HAL_GPIO_Init(GPIOB, &GPIO_Initure);
-
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
-    Delay(0x1FFFFFF);
-
-    while (1) {
-        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-        Delay(0x1FFFFFF);
-        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);
-    }
+    while(1)
+    {
+       if(USART_RX_STA&0x8000)
+		{					   
+			len=USART_RX_STA&0x3fff;//得到此次接收到的数据长度
+			printf("\r\nyou send\r\n");
+			HAL_UART_Transmit(&UART1_Handler,(uint8_t*)USART_RX_BUF,len,1000);	//发送接收到的数据
+			while(__HAL_UART_GET_FLAG(&UART1_Handler,UART_FLAG_TC)!=SET);		//等待发送结束
+			printf("\r\n\r\n");//插入换行
+			USART_RX_STA=0;
+		}else
+		{
+			times++;
+			if(times%5000==0)
+			{
+				printf("\r\nALIENTEK STM32F7开发板 串口实验\r\n");
+				printf("正点原子@ALIENTEK\r\n\r\n\r\n");
+			}
+			if(times%200==0)printf("请输入数据,以回车键结束\r\n");  
+			if(times%30==0)LED0_Toggle;//闪烁LED,提示系统正在运行.
+			delay_ms(10);   
+		}
+	}
 }
