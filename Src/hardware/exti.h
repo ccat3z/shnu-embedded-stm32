@@ -16,4 +16,11 @@
 
 void EXTI_Init(void); //外部中断初始化
 
+uint8_t exti_received;
+
+#define KEY_UP_EXTI 1
+#define KEY0_EXTI (1 << 1)
+#define KEY1_EXTI (1 << 2)
+#define KEY2_EXTI (1 << 3)
+
 #endif

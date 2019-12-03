@@ -59,21 +59,25 @@ void EXTI_Init(void)
 void EXTI0_IRQHandler(void)
 {
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);   //调用中断处理公用函数
+    exti_received |= KEY0_EXTI;
 }
 
 void EXTI2_IRQHandler(void)
 {
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);   //调用中断处理公用函数
+    exti_received |= KEY1_EXTI;
 }
 
 void EXTI3_IRQHandler(void)
 {
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);   //调用中断处理公用函数
+    exti_received |= KEY2_EXTI;
 }
 
 void EXTI15_10_IRQHandler(void)
 {
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);  //调用中断处理公用函数
+    exti_received |= KEY_UP_EXTI;
 }
 
 //中断服务程序中需要做的事情
