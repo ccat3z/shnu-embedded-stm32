@@ -1,5 +1,5 @@
 # Flags
-TARGET = target
+TARGET = timer
 RELEASE_TARGET =  $(TARGET).zip
 DEBUG = 1
 OPT = -Og
@@ -9,7 +9,8 @@ AS_DEFS =
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
 -DSTM32F767xx \
--DHAL_UART_MODULE_ENABLED
+-DHAL_UART_MODULE_ENABLED \
+-DHAL_TIM_MODULE_ENABLED
 
 # C sources
 C_INCLUDES =  \
@@ -29,6 +30,7 @@ Src/system/usart.c \
 Src/hardware/key.c \
 Src/hardware/led.c \
 Src/hardware/exti.c \
+Src/hardware/timer.c \
 Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_cortex.c \
 Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_tim.c \
 Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_tim_ex.c \

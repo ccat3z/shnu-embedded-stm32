@@ -1,33 +1,29 @@
 #include "system/sys.h"
 #include "system/delay.h"
 #include "system/usart.h"
-void Delay(__IO uint32_t nCount);
-void Delay(__IO uint32_t nCount) {
-    while (nCount--) {
-    }
-}
+#include "hardware/led.h"
+#include "hardware/timer.h"
+/************************************************
+ ALIENTEK 阿波罗STM32F7开发板 实验7
+ 定时器中断实验-HAL库函数版
+ 技术支持：www.openedv.com
+ 淘宝店铺：http://eboard.taobao.com 
+ 关注微信公众平台微信号："正点原子"，免费获取STM32资料。
+ 广州市星翼电子科技有限公司  
+ 作者：正点原子 @ALIENTEK
+************************************************/
 
-int main(void) {
-    GPIO_InitTypeDef GPIO_Initure;
-
-    Cache_Enable();                  //打开L1-Cache
-    HAL_Init();                      //初始化HAL库
-    Stm32_Clock_Init(432, 25, 2, 9); //设置时钟,216Mhz
-    __HAL_RCC_GPIOB_CLK_ENABLE();    //开启GPIOB时钟
-
-    GPIO_Initure.Pin = GPIO_PIN_0 | GPIO_PIN_1; // PB1,0
-    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP;    //推挽输出
-    GPIO_Initure.Pull = GPIO_PULLUP;            //上拉
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;       //高速
-    HAL_GPIO_Init(GPIOB, &GPIO_Initure);
-
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
-    Delay(0x1FFFFFF);
-
-    while (1) {
-        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-        Delay(0x1FFFFFF);
-        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);
-    }
+int main(void)
+{
+    Cache_Enable();                 //打开L1-Cache
+    HAL_Init();				        //初始化HAL库
+    Stm32_Clock_Init(432,25,2,9);   //设置时钟,216Mhz 
+    delay_init(216);                //延时初始化
+	uart_init(115200);		        //串口初始化
+    LED_Init();                     //初始化LED
+    TIM3_Init(5000-1,10800-1);      //定时器3初始化，定时器时钟为108M，分频系数为10800-1，
+                                    //所以定时器3的频率为108M/10800=10K，自动重装载为5000-1，那么定时器周期就是500ms
+    while(1)
+    {
+	}  
 }
